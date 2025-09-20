@@ -3,65 +3,29 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { useSession } from "next-auth/react";
+import { useCart, Drink } from "../context/CartContext"; 
 
-const initialDrinks = [
-  {
-    id: 1,
-    name: "Matcha Latte",
-    image: "/images/matcha-latte.jpg",
-    numberOfOrders: 0,
-  },
-  {
-    id: 2,
-    name: "Creamy Matcha",
-    image: "/images/creamy-matcha.jpg",
-    numberOfOrders: 0,
-  },
-  {
-    id: 3,
-    name: "Coco Matcha",
-    image: "/images/coco-matcha.jpg",
-    numberOfOrders: 0,
-  },
-  {
-    id: 4,
-    name: "Grass Jelly Coffee",
-    image: "/images/grass-jelly-coffee.jpg",
-    numberOfOrders: 0,
-  },
-  {
-    id: 5,
-    name: "Almond Coffee",
-    image: "/images/almond-coffee.jpg",
-    numberOfOrders: 0,
-  },
+
+const drinksData: Drink[] = [
+  { id: 1, name: "Matcha Latte", image: "/images/matcha-latte.jpg", numberOfOrders: 0 },
+  { id: 2, name: "Creamy Matcha", image: "/images/creamy-matcha.jpg", numberOfOrders: 0 },
+  { id: 3, name: "Coco Matcha", image: "/images/coco-matcha.jpg", numberOfOrders: 0 },
+  { id: 4, name: "Grass Jelly Coffee", image: "/images/grass-jelly-coffee.jpg", numberOfOrders: 0 },
+  { id: 5, name: "Almond Coffee", image: "/images/almond-coffee.jpg", numberOfOrders: 0 },
 ];
 
 export default function ShowMenu() {
   const router = useRouter();
-  const [drinks, setDrinks] = React.useState(initialDrinks);
+  const { cart, addToCart, removeFromCart } = useCart();
 
-  function handleAdd(id: number) {
-    setDrinks((prevDrinks) =>
-      prevDrinks.map((drink) =>
-        drink.id === id
-          ? { ...drink, numberOfOrders: drink.numberOfOrders + 1 }
-          : drink
-      )
-    );
-  }
-  function handleRemove(id: number) {
-    setDrinks((prevDrinks) =>
-      prevDrinks.map((drink) =>
-        drink.id === id
-          ? { ...drink, numberOfOrders: drink.numberOfOrders - 1 }
-          : drink
-      )
-    );
-  }
 
+  const getDrinkCount = (id: number) => {
+    const drinkInCart = cart.find((d) => d.id === id);
+    return drinkInCart ? drinkInCart.numberOfOrders : 0;
+  };
   // Calculate cart count (sum of all orders)
-  const cartCount = drinks.reduce(
+  let cartCount = cart.reduce(
     (sum, drink) => sum + drink.numberOfOrders,
     0
   );
@@ -133,7 +97,7 @@ export default function ShowMenu() {
       <h1 className="text-2xl font-bold mt-40">Our Drinks</h1>
 
       <div className="flex flex-col gap-8">
-        {drinks.map((drink) => (
+        {drinksData.map((drink) => (
           <div key={drink.id} className="flex flex-col items-center">
             <Image
               src={drink.image}
@@ -146,7 +110,7 @@ export default function ShowMenu() {
               {drink.name}
               <p className="flex items-center gap-1 px-2 py-1 rounded">
                 <svg
-                  onClick={() => handleAdd(drink.id)}
+                  onClick={() => addToCart(drink)}
                   className="hover:cursor-pointer"
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -161,9 +125,9 @@ export default function ShowMenu() {
                   <path d="M5 12h14" />
                   <path d="M12 5v14" />
                 </svg>
-                ({drink.numberOfOrders})
+                ({getDrinkCount(drink.id)})
                 <svg
-                  onClick={() => handleRemove(drink.id)}
+                  onClick={() => removeFromCart(drink.id)}
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
                   height="24"
