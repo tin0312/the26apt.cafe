@@ -3,16 +3,15 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { useSession } from "next-auth/react";
 import { useCart, Drink } from "../context/CartContext"; 
 
 
 const drinksData: Drink[] = [
-  { id: 1, name: "Matcha Latte", image: "/images/matcha-latte.jpg", numberOfOrders: 0 },
-  { id: 2, name: "Creamy Matcha", image: "/images/creamy-matcha.jpg", numberOfOrders: 0 },
-  { id: 3, name: "Coco Matcha", image: "/images/coco-matcha.jpg", numberOfOrders: 0 },
-  { id: 4, name: "Grass Jelly Coffee", image: "/images/grass-jelly-coffee.jpg", numberOfOrders: 0 },
-  { id: 5, name: "Almond Coffee", image: "/images/almond-coffee.jpg", numberOfOrders: 0 },
+  { id: 1, name: "Matcha Latte", image: "/images/matcha-latte.jpg", numberOfOrders: 0, price: 5 },
+  { id: 2, name: "Creamy Matcha", image: "/images/creamy-matcha.jpg", numberOfOrders: 0, price: 6 },
+  { id: 3, name: "Coco Matcha", image: "/images/coco-matcha.jpg", numberOfOrders: 0  , price: 5.5},
+  { id: 4, name: "Grass Jelly Coffee", image: "/images/grass-jelly-coffee.jpg", numberOfOrders: 0, price: 5.5 },
+  { id: 5, name: "Almond Coffee", image: "/images/almond-coffee.jpg", numberOfOrders: 0, price: 5.5 },
 ];
 
 export default function ShowMenu() {

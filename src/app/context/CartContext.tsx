@@ -9,6 +9,7 @@ export type Drink = {
   name: string;
   image: string;
   numberOfOrders: number;
+  price: number
 };
 
 type CartContextType = {
