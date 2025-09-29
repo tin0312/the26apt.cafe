@@ -2,12 +2,19 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { update } = useSession();
   const [phone, setPhone] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
-  const [userId, setUserId] = useState("");
+
+  const [showModal, setShowModal] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
   async function handleSendOtp() {
     const res = await fetch("/api/send-otp", {
@@ -19,17 +26,26 @@ export default function LoginPage() {
   }
 
   async function handleVerifyOtp() {
-    const res = await fetch("/api/verify-otp", {
-      method: "POST",
-      body: JSON.stringify({ phoneNumber: phone, otp }),
-      headers: { "Content-Type": "application/json" },
+     const result = await signIn("credentials", {
+        redirect: false,
+        phone,
+        otp,
+      });
+     if (result?.ok) {
+      setShowModal(true)
+  } else {
+     console.log(result)
+  }
+  }
+
+  async function handleSaveUserData() {
+     await update({
+      name,
+      phone,
+      email,
     });
-    const data = await res.json();
-    if (data.success) {
-      setUserId(data.userId);
-      alert("Phone verified!");
-      // redirect or set session
-    }
+    setShowModal(false);
+    router.push("/");
   }
 
   return (
@@ -79,6 +95,43 @@ export default function LoginPage() {
           </>
         )}
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white p-6 rounded shadow-md w-96">
+            <h2 className="text-lg font-bold mb-4">Complete Your Profile</h2>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Name"
+              className="border p-2 rounded w-full mb-2"
+              required
+            />
+            <input
+              type="tel"
+              value={phone}
+              disabled
+              className="border p-2 rounded w-full mb-2 bg-gray-100"
+            />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email (optional)"
+              className="border p-2 rounded w-full mb-4"
+            />
+            <button
+              onClick={handleSaveUserData}
+              className="w-full bg-blue-600 text-white py-2 rounded"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
