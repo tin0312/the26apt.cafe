@@ -58,7 +58,7 @@ export async function POST(req: Request) {
 
     // 4. Send mail
     await transporter.sendMail({
-      from: `${process.env.EMAIL_USER}`,
+      from: "the26apt.cafe",
       to:  `${userEmail}`,
       subject: "Your Order Receipt",
       html,
