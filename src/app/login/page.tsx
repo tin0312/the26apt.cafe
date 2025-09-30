@@ -11,12 +11,14 @@ export default function LoginPage() {
   const [phone, setPhone] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
+  const [isOTPVerified, setIsOTPVerified] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
   async function handleSendOtp() {
+    setIsOTPVerified(true);
     const res = await fetch("/api/send-otp", {
       method: "POST",
       body: JSON.stringify({ phoneNumber: phone }),
@@ -26,20 +28,21 @@ export default function LoginPage() {
   }
 
   async function handleVerifyOtp() {
-     const result = await signIn("credentials", {
+     const response = await signIn("credentials", {
         redirect: false,
         phone,
         otp,
       });
-     if (result?.ok) {
+     if (response.success) {
       setShowModal(true)
   } else {
-     console.log(result)
+    setIsOTPVerified(false);
+    setOtp("");
   }
   }
 
   async function handleSaveUserData() {
-     await update({
+    await update({
       name,
       phone,
       email,
@@ -83,8 +86,8 @@ export default function LoginPage() {
               type="text"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              placeholder="Enter OTP"
-              className="border p-2 rounded w-full"
+              placeholder={`${!isOTPVerified ? "Enter valid verification code" : "Enter OTP"}`}
+              className={`border p-2 rounded w-full ${isOTPVerified ? '' : 'border-red-500'}`}
             />
             <button
               onClick={handleVerifyOtp}

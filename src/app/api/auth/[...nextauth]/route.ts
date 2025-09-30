@@ -27,6 +27,8 @@ const authOptions = {
 
         const data = await res.json();
 
+        console.log("OTP verify response", data);
+
         if (!data.success) return data;
 
         // Return user object → goes into JWT & session
