@@ -1,17 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { update } = useSession();
+  const { update, status, session } = useSession();
   const [phone, setPhone] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [isOTPVerified, setIsOTPVerified] = useState(false);
+  const [loginMethod, setLoginMethod] = useState<"google" | "otp" | null>(null);
 
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState("");
@@ -19,6 +20,7 @@ export default function LoginPage() {
 
   async function handleSendOtp() {
     setIsOTPVerified(true);
+    setLoginMethod("otp");
     const res = await fetch("/api/send-otp", {
       method: "POST",
       body: JSON.stringify({ phoneNumber: phone }),
@@ -41,6 +43,13 @@ export default function LoginPage() {
   }
   }
 
+  useEffect(() => {
+    if(status === "authenticated" && !session?.user.phone) {
+      setLoginMethod("google");
+      setShowModal(true);
+    }  
+  },[session, status]);
+
   async function handleSaveUserData() {
     await update({
       name,
@@ -58,7 +67,7 @@ export default function LoginPage() {
       {/* Google login */}
       <button
         className="px-4 py-2 bg-red-500 text-white rounded"
-        onClick={() => signIn("google", { callbackUrl: "/"})}
+        onClick={() => signIn("google", { redirect: false})}
       >
         Continue with Google
       </button>
@@ -114,9 +123,10 @@ export default function LoginPage() {
             />
             <input
               type="tel"
+              onChange={(event)=> setPhone(event.target.value)}
               value={phone}
-              disabled
-              className="border p-2 rounded w-full mb-2 bg-gray-100"
+              disabled={loginMethod === "otp"}
+              className="border-none p-2 w-full mb-2 bg-gray-100 "
             />
             <input
               type="email"
