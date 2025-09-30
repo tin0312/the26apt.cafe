@@ -1,13 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 
 export default function Home() {
   const router = useRouter();
+  const [userDropDown, showUserDropdown] = useState(false);
   const { data: session } = useSession();
-  console.log("Session data:", session);
 
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
@@ -20,8 +21,71 @@ export default function Home() {
           className="rounded-full m-auto"
         />
         {session?.user ? (
-          <p className="fixed top-6.5 right-6.5 ">
+          <span className="flex fixed top-6.5 right-6.5 ">
+            <svg
+              onClick={() => showUserDropdown(true)}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="lucide lucide-chevron-down-icon lucide-chevron-down"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
             Hello, {session.user.name}
+            {userDropDown ? (
+              <div className="absolute top-10 right-0 bg-white border border-gray-300 rounded shadow-md p-4 z-10">
+                <button
+                  onClick={() => showUserDropdown(false)}
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    strokeLinecap="round"
+                    stroke-linejoin="round"
+                    className="lucide lucide-x-icon lucide-x"
+                  >
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                  </svg>
+                </button>
+                <ul className="space-y-2">
+                  <li>
+                    <button
+                      onClick={() => {
+                        router.push("/profile");
+                        showUserDropdown(false);
+                      }}
+                      className="w-full text-left hover:bg-gray-100 px-2 py-1 rounded"
+                    >
+                      Profile
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        router.push("/cart");
+                        showUserDropdown(false);
+                      }}
+                      className="w-full text-left hover:bg-gray-100 px-2 py-1 rounded"
+                    >
+                      Orders
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            ) : null}
             <span className="pl-2 align-text-top">
               <button onClick={() => signOut({ callbackUrl: "/" })}>
                 <svg
@@ -42,7 +106,7 @@ export default function Home() {
                 </svg>
               </button>
             </span>
-          </p>
+          </span>
         ) : (
           <button onClick={() => router.push("/login")}>
             <svg
