@@ -1,10 +1,11 @@
 "use client";
 
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-import {CartProvider} from "./context/CartContext";
+import { CartProvider } from "./context/CartContext";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,11 +17,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// export const metadata: Metadata = {
-//   title: "The 26apt Cafe",
-//   description: "Your go-to Viet coffee",
-// };
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,11 +27,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-         <SessionProvider>
-            <CartProvider>
-                {children}
-            </CartProvider>
-         </SessionProvider>
+        <SessionProvider>
+        <Header />
+          <CartProvider>{children}</CartProvider>
+        </SessionProvider>
+        <Footer />
       </body>
     </html>
   );
