@@ -10,7 +10,7 @@ export default function Header() {
   const [userDropDown, showUserDropdown] = useState(false);
   const { data: session } = useSession();
   return (
-    <header className="fixed z-100 w-full border-b bg-white p-4 text-lg font-semibold text-gray-700">
+    <header className="bg-black text-white fixed [box-shadow:0_2px_8px_rgb(250_242_242_/_10%)] top-0 z-100 w-full shadow-md p-4 text-lg font-semibold text-gray-700">
       <svg
         onClick={() => router.push("/")}
         xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +22,7 @@ export default function Header() {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="lucide lucide-coffee-icon lucide-coffee"
+        className="fill-amber-100 lucide lucide-coffee-icon lucide-coffee hover:cursor-pointer hover:fill-amber-700"
       >
         <path d="M10 2v2" />
         <path d="M14 2v2" />
