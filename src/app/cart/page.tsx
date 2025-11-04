@@ -3,8 +3,10 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
+  const router = useRouter();
   const { cart, addToCart, removeFromCart, clearCart } = useCart();
 
   //get total price
@@ -23,8 +25,10 @@ export default function CartPage() {
 
       const data = await res.json();
       if (data.success) {
-        alert("Order placed! Check your email.");
         clearCart();
+        router.push("/orders");
+
+        alert("Order placed! Check your email.");
       } else {
         alert("Error: " + data.message);
       }
@@ -33,6 +37,8 @@ export default function CartPage() {
       alert("Something went wrong!");
     }
   }
+
+  // save order data in the database
 
   return (
     <div className="p-29 flex flex-col items-center h-screen justify-center">
@@ -58,7 +64,7 @@ export default function CartPage() {
           <button onClick={() => removeFromCart(drink.id)}>-</button>
         </div>
       ))}
-      <p>Total: {totalPrice}</p>
+      <p>Total: ${totalPrice}</p>
       <div className="flex gap-1.5">
         <button
           onClick={clearCart}

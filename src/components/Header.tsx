@@ -49,10 +49,10 @@ export default function Header() {
             </svg>
             Hello, {session.user.name}
             {userDropDown ? (
-              <div className="absolute top-10 right-0 bg-white border border-gray-300 rounded shadow-md p-4 z-10">
+              <div className="absolute top-10 right-0 border border-gray-300 rounded shadow-md p-4 z-10">
                 <button
                   onClick={() => showUserDropdown(false)}
-                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                  className="absolute top-2 right-2 text-gray-500 hover:border-amber-50"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +77,7 @@ export default function Header() {
                         router.push("/profile");
                         showUserDropdown(false);
                       }}
-                      className="w-full text-left hover:bg-gray-100 px-2 py-1 rounded"
+                      className="w-full text-left hover:border-amber-50 px-2 py-1 rounded"
                     >
                       Profile
                     </button>
@@ -88,9 +88,20 @@ export default function Header() {
                         router.push("/cart");
                         showUserDropdown(false);
                       }}
-                      className="w-full text-left hover:bg-gray-100 px-2 py-1 rounded"
+                      className="w-full text-left hover:border-amber-50 px-2 py-1 rounded"
                     >
-                      Orders
+                      Your cart
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      onClick={() => {
+                        router.push("/orders");
+                      }}
+                      className="w-full text-left hover:border-amber-50 px-2 py-1 rounded"
+                    >
+                      Orders status
                     </button>
                   </li>
                 </ul>

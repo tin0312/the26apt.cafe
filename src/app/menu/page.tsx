@@ -73,14 +73,15 @@ export default function ShowMenu() {
       </div>
       <h1 className="text-2xl font-bold mt-40">Our Drinks</h1>
 
-      <div className="flex flex-col gap-8">
+      <div className="grid grid-cols-3 gap-x-10 gap-y-22">
         {drinksData.map((drink) => (
+
           <div key={drink.id} className="flex flex-col items-center">
             <Image
               src={drink.image}
               alt={drink.name}
-              width={300}
-              height={300}
+              width={150}
+              height={150}
               className="rounded-xl shadow-lg"
             />
             <div className="flex mt-2 text-lg font-medium items-center gap-2">
@@ -121,6 +122,8 @@ export default function ShowMenu() {
               </p>
             </div>
           </div>
+
+
         ))}
       </div>
     </div>
