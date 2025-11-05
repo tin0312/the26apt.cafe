@@ -10,10 +10,10 @@
     "lint:fix": "eslint --fix"
   },
   "dependencies": {
-    "@auth/core": "^0.41.1",
+    "@auth/core": "^0.34.3",
     "@prisma/client": "^6.18.0",
     "next": "^15.5.4",
-    "next-auth": "^4.24.11",
+    "next-auth": "^4.24.13",
     "nodemailer": "^7.0.10",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

@@ -23,7 +23,7 @@ export default function ProfilePage() {
 
   return <div>
      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white p-6 rounded shadow-md w-96">
+          <div className="p-6 rounded shadow-md w-96">
             <h2 className="text-lg font-bold mb-4">Complete Your Profile</h2>
             <input
               type="text"
