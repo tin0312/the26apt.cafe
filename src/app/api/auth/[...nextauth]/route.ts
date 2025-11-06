@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { saveUserFromGoogle } from "./saveUser";
 
 // Auth handler config
 const authOptions = {
@@ -51,6 +52,7 @@ const authOptions = {
 
       // Google login
       if (account && profile && account.provider === "google") {
+        await saveUserFromGoogle(profile);
         token.id = profile.sub;
         token.name = profile.name;
         token.email = profile.email;
